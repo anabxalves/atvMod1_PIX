@@ -15,13 +15,13 @@ def callback(ch, method, properties, body):
 
 # Função para gravar a mensagem no arquivo log.txt
 def write_to_log(message):
-    log_file_path = 'atvMod1_PIX/Consumidor/src/main/java/com/atvMod1_PIX/consumer_log.txt'
+    log_file_path = 'consumer_log.txt'
     with open(log_file_path, 'a') as log_file:
         log_file.write(message + '\n')
 
 # Função para ler e printar o arquivo de log
 def print_auditoria_log():
-    log_file_path = 'atvMod1_PIX/Consumidor/src/main/java/com/atvMod1_PIX/consumer_log.txt'
+    log_file_path = 'consumer_log.txt'
     if os.path.exists(log_file_path):
         with open(log_file_path, 'r') as log_file:
             logs = log_file.readlines()
