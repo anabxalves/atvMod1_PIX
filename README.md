@@ -54,7 +54,7 @@ Esse sistema foi desenvolvido para a disciplina de Fundamentos de Computação C
 
 ## Contexto do Sistema
 
-O projeto desenvolve um sistema de notificação para validação de pagamentos via Pix. Nele, quando um cliente realiza um pagamento, o sistema enviará uma mensagem para a o cliente e empresa destinatária, informando a confirmação da transação. Ao mesmo tempo, um backend de auditoria, representado pelo BACEN, registrará todas as transações para monitoramento e controle.
+O projeto desenvolve um sistema de notificação para validação de pagamentos via Pix. Nele, quando um cliente realiza um pagamento, o sistema enviará uma mensagem para o cliente e empresa destinatária, informando a confirmação da transação. Ao mesmo tempo, um backend de auditoria, representado pelo BACEN, registrará todas as transações para monitoramento e controle.
 
 ## Execução
 
