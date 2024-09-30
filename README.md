@@ -60,23 +60,34 @@ O projeto desenvolve um sistema de notificação para validação de pagamentos 
 
 Para executar nosso sistema, siga as instruções e orientações abaixo:
 
-1. Clonar o repositório localmente, utilizando o comando `git clone https://github.com/anabxalves/atvMod1_PIX`.
+1. **Criar Ambiente Virutal**
+>- MacOS/Linux: `python3 -m venv venv`
+>- Windows: `python -m venv venv`
 
-2. Ajustar servidor AMPQ, no Cloud MQP e RabbitMQ, ajuste o link no arquivo `consumidor.py`, no local indicado:
+2. **Ativar ambiente virtual**
+>No diretório da pasta "venv" (criado acima):
+>- MacOS/Linux: `source venv/bin/activate`
+>- Windows: `venv/Scripts/activate`
+
+3. **Clonar repositório**
+>Com o ambiente "venv" ativado:
+>- `git clone https://github.com/anabxalves/atvMod1_PIX`
+
+4. Ajustar servidor AMPQ, no Cloud MQP e RabbitMQ, ajuste o link no arquivo `consumidor.py`, no local indicado:
 <p align="center">
   <img src="https://private-user-images.githubusercontent.com/108446826/371925192-55051108-fe1f-4ae2-b499-13c56d75fa06.jpeg?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3Mjc2NjQyNzksIm5iZiI6MTcyNzY2Mzk3OSwicGF0aCI6Ii8xMDg0NDY4MjYvMzcxOTI1MTkyLTU1MDUxMTA4LWZlMWYtNGFlMi1iNDk5LTEzYzU2ZDc1ZmEwNi5qcGVnP1gtQW16LUFsZ29yaXRobT1BV1M0LUhNQUMtU0hBMjU2JlgtQW16LUNyZWRlbnRpYWw9QUtJQVZDT0RZTFNBNTNQUUs0WkElMkYyMDI0MDkzMCUyRnVzLWVhc3QtMSUyRnMzJTJGYXdzNF9yZXF1ZXN0JlgtQW16LURhdGU9MjAyNDA5MzBUMDIzOTM5WiZYLUFtei1FeHBpcmVzPTMwMCZYLUFtei1TaWduYXR1cmU9N2M2MmNlNDRkMjhiYjcxZmVjYmQ3MzU4OTA2NjY5Zjk0YjY3MDc1NzRkOGYwYjdhZjA5NTAyMjEzZmMxNzY1YyZYLUFtei1TaWduZWRIZWFkZXJzPWhvc3QifQ.HYoxARBp5o2fbzXU3cw2ugBSEkYZ-xU1RACjLfyKrM8" width="800"/>
 </p>
 
-3. Para quantidade de Produtores desejada, deve-se rodar o arquivo `ProdutorApplication.java`, em que cada instância será um produtor diferente. Realizando isso, no início de cada execução, será questionado o `nome` e `banco` de quem está enviando a transação, para posteriormente questionar o destinatário, seu banco e o valor da transação.
+5. Para quantidade de Produtores desejada, deve-se rodar o arquivo `ProdutorApplication.java`, em que cada instância será um produtor diferente. Realizando isso, no início de cada execução, será questionado o `nome` e `banco` de quem está enviando a transação, para posteriormente questionar o destinatário, seu banco e o valor da transação.
 > Ressalta-se que é aqui que o roteamento é definido, pelo destinatário e banco para qual será enviado o PIX.
 
-4. Para a quantidade de Consumidores desejada, deve-se instanciar o arquivo `consumidor.py`. Ao iniciar a execução, o Menu ofertará 3 opções de consumidor, sendo eles Auditoria BACEN, Banco e Destinatário, todos acima especificados.
+6. Para a quantidade de Consumidores desejada, deve-se instanciar o arquivo `consumidor.py`. Ao iniciar a execução, o Menu ofertará 3 opções de consumidor, sendo eles Auditoria BACEN, Banco e Destinatário, todos acima especificados.
 > A depender do consumidor selecionado, as mensagens estarão sendo direcionadas conforme:
 >- A Auditoria BACEN não somente receberá todas as menagens enviadas por todos os Produtores, como também é o responsável por printar todo o histórico de transações presente no log `consumer_log.txt`. A mensagem será roteada utilizando a chave `pix.#`.
 >- O Banco receberá todas as transações que foram encaminhadas a sua instituição, sendo roteada com a chave `pix.{bank_name}.#`.
 >- Já o Destinatário receberá apenas as transações que foram encaminhadas para ele, por meio do roteamento com chave `pix.{bank_name}.{consumer_name}`.
 
-5. Ainda é possível conferir as transações realizadas durante as execuções no arquivo `consumer_log.txt`.
+7. Ainda é possível conferir as transações realizadas durante as execuções no arquivo `consumer_log.txt`.
 
 ## Composição da Mensagem
 
