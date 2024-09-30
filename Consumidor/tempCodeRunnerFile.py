@@ -13,13 +13,13 @@ def callback(ch, method, properties, body):
     except json.JSONDecodeError as e:
         print(f"Erro ao decodificar a mensagem: {e}")
 
-# Função para gravar a mensagem no arquivo consumer_log.txt
+# Função para gravar a mensagem no arquivo log.txt
 def write_to_log(message):
     log_file_path = 'consumer_log.txt'
     with open(log_file_path, 'a') as log_file:
         log_file.write(message + '\n')
 
-# Função para ler e exibir o arquivo de log
+# Função para ler e printar o arquivo de log
 def print_auditoria_log():
     log_file_path = 'consumer_log.txt'
     if os.path.exists(log_file_path):
@@ -44,15 +44,14 @@ def main():
     # Declarando o exchange do tipo tópico
     channel.exchange_declare(exchange='topic-exchange', exchange_type='topic', auto_delete=True)
 
-    # Obter as chaves de roteamento com base na escolha do usuário
-    routing_keys = define_routing_keys()
+    # Configuração da fila e Routing Key com base na escolha do usuário
+    queue_name, routing_keys = define_queue_and_routing_keys()
 
     if routing_keys:
-        # Declarando uma fila exclusiva com nome gerado pelo servidor
-        result = channel.queue_declare(queue='', exclusive=True)
-        queue_name = result.method.queue
+        # Declarando a fila
+        channel.queue_declare(queue=queue_name, exclusive=False)
 
-        # Ligando a fila ao exchange com as chaves de roteamento
+        # Ligando a fila ao exchange com as chaves de roteamento calculadas
         for routing_key in routing_keys:
             print(f"Ligando a fila {queue_name} ao exchange com a chave de roteamento: {routing_key}")
             channel.queue_bind(exchange='topic-exchange', queue=queue_name, routing_key=routing_key)
@@ -63,8 +62,9 @@ def main():
         print(f" [*] Aguardando mensagens na fila {queue_name}. Para sair, pressione CTRL+C")
         channel.start_consuming()
 
-def define_routing_keys():
+def define_queue_and_routing_keys():
     routing_keys = []
+    queue_name = ""
 
     # Menu para escolha
     print("Escolha sua função:")
@@ -84,16 +84,18 @@ def define_routing_keys():
 
         if auditoria_escolha == '1':
             print_auditoria_log()
-            return []  # Não precisa configurar fila para apenas imprimir o log
-
+            return "", []  # Não precisa configurar fila para apenas printar o log
+        
         elif auditoria_escolha == '2':
             print("Escutando todas as mensagens PIX.")
+            queue_name = 'auditoria_bacen'
             routing_keys.append('pix.#')
 
     elif escolha == '2':
-        # Banco: Receber mensagens de bancos específicos
+        # Banco: Receber mensagens de bancos específicos (independentemente do destinatário)
         print("Informe o nome do banco:")
         bank_name = input().strip().lower()
+        queue_name = f'banco_{bank_name}'
         routing_keys.append(f'pix.{bank_name}.#')
 
     elif escolha == '3':
@@ -102,13 +104,15 @@ def define_routing_keys():
         bank_name = input().strip().lower()
         print("Informe o nome do destinatário:")
         consumer_name = input().strip().lower()
+        queue_name = f'{bank_name}_{consumer_name}'
         routing_keys.append(f'pix.{bank_name}.{consumer_name}')
-
+    
     else:
         print("Escolha inválida. Por padrão, escutando todas as mensagens.")
+        queue_name = 'auditoria_bacen'
         routing_keys.append('pix.#')
 
-    return routing_keys
+    return queue_name, routing_keys
 
 if __name__ == '__main__':
     main()
