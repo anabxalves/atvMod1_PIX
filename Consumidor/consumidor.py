@@ -36,6 +36,7 @@ def print_auditoria_log():
         print("O arquivo de log não foi encontrado.")
 
 def main():
+    # alterar link abaixo para a do seu servidor
     url = 'amqps://vbiidqub:WB5wOr8lg7Aujc3ySCV0NdbLAWdIpcOC@prawn.rmq.cloudamqp.com/vbiidqub'
     connection_params = pika.URLParameters(url)
     connection = pika.BlockingConnection(connection_params)
