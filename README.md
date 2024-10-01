@@ -60,7 +60,7 @@ O projeto desenvolve um sistema de notificação para validação de pagamentos 
 
 Para executar nosso sistema, siga as instruções e orientações abaixo:
 
-1. **Criar Ambiente Virutal**
+1. **Criar Ambiente Virtual**
 >- MacOS/Linux: `python3 -m venv venv`
 >- Windows: `python -m venv venv`
 
